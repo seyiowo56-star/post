@@ -1,0 +1,112 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login Form</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Bootstrap CSS for Modal -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <h1>Login</h1>
+
+    <form id="loginForm">
+
+        <p class="intro-p">Sign into your account</p>
+
+        <br>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+
+        <br><br>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" required>
+
+        <br><br>
+
+        <a href="#" class="forgot-link">Forgotten password?</a>
+
+        <br><br>
+
+        <button type="submit">Signin</button>
+
+        <p class="dont">
+            Don't have an account?
+            <a href="register.html">Sign up</a>
+        </p>
+
+    </form>
+
+
+    <!-- LOGIN SUCCESS MODAL -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">Login Successful!</h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+                </div>
+
+                <div class="modal-body text-center">
+
+                    <h4 class="text-success">Welcome!</h4>
+
+                    <p>You have successfully signed into your account.</p>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                        Continue
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Form JavaScript -->
+    <script>
+
+        const form = document.getElementById("loginForm");
+
+        form.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const modal = new bootstrap.Modal(
+                document.getElementById("loginModal")
+            );
+
+            modal.show();
+
+        });
+
+    </script>
+
+</body>
+</html>
+```

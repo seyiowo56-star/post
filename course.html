@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Course Management Dashboard">
+
+    <title>Courses | University Portal</title>
+
+    <!-- Bootstrap CSS (IMPORTANT) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Simple Datatables CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet">
+
+    <!-- Your Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Font Awesome -->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+    <style>
+        /* Table styling */
+        #datatablesSimple {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #datatablesSimple th,
+        #datatablesSimple td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            vertical-align: middle;
+        }
+
+        /* Hover effect */
+        #datatablesSimple tbody tr:hover {
+            background-color: #e2e6ea !important;
+            cursor: pointer;
+        }
+
+        /* Keep action buttons on one line */
+        .action-cell {
+            white-space: nowrap;
+            min-width: 120px;
+        }
+
+        /* Dropdown visibility */
+        .dropdown-menu {
+            z-index: 1080;
+        }
+
+        /* Prevent dropdown clipping */
+        .table-responsive {
+            overflow: visible;
+        }
+
+        /* Status badges */
+        .status-badge {
+            padding: 6px 10px;
+            border-radius: 5px;
+        }
+
+        /* Modal appearance */
+        .modal-content {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="sb-nav-fixed">
+
+    <!-- Top Navigation -->
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+
+        <a class="navbar-brand ps-3" href="index.html">
+            University Portal
+        </a>
+
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4"
+                id="sidebarToggle" type="button">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <form class="d-none d-md-inline-block ms-auto me-3">
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="Search for...">
+                <button class="btn btn-primary" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+
+        <ul class="navbar-nav ms-auto me-3">
+            <li class="nav-item dropdown">
+
+                <a class="nav-link dropdown-toggle"
+                   href="#"
+                   id="navbarDropdown"
+                   role="button"
+                   data-bs-toggle="dropdown"
+                   aria-expanded="false">
+
+                    <i class="fas fa-user fa-fw"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Activity Log</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                </ul>
+
+            </li>
+        </ul>
+
+    </nav>
+
+
+    <!-- Side Navigation -->
+    <div id="layoutSidenav">
+
+        <div id="layoutSidenav_nav">
+
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+
+                <div class="sb-sidenav-menu">
+
+                    <div class="nav">
+
+                        <div class="sb-sidenav-menu-heading">Core</div>
+
+                        <a class="nav-link" href="index.html">
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            Dashboard
+                        </a>
+
+                        <a class="nav-link" href="students.html">
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            Students
+                        </a>
+
+                        <a class="nav-link" href="departments.html">
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            Departments
+                        </a>
+
+                        <a class="nav-link active" href="courses.html">
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            Courses
+                        </a>
+
+                        <a class="nav-link" href="semesters.html">
+                            <div class="sb-nav-link-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            Semesters
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </nav>
+
+        </div>
+
+
+        <!-- Main Content -->
+        <div id="layoutSidenav_content">
+
+            <main>
+
+                <div class="container-fluid px-4">
+
+                    <h1 class="mt-4">
+                        <i class="fas fa-book-open"></i> Courses
+                    </h1>
+
+                    <ol class="breadcrumb mb-4">
+                        <li class="breadcrumb-item">
+                            <a href="index.html">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item active">Courses</li>
+                    </ol>
+
+
+                    <!-- Course Table -->
+                    <div class="card mb-4 shadow-sm">
+
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+
+                            <span>
+                                <i class="fas fa-table me-2"></i>
+                                Course Records
+                            </span>
+
+                            <button type="button"
+                                    class="btn btn-light btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#addCourseModal">
+
+                                <i class="fas fa-plus me-1"></i>
+                                Add New
+
+                            </button>
+
+                        </div>
+
+
+                        <div class="card-body">
+
+                            <div class="table-responsive">
+
+                                <table id="datatablesSimple"
+                                       class="table table-bordered table-hover align-middle text-center">
+
+                                    <thead class="table-dark">
+
+                                        <tr>
+                                            <th>Course Title</th>
+                                            <th>Course Code</th>
+                                            <th>Credit Hour</th>
+                                            <th>Added By</th>
+                                            <th>Added Date</th>
+                                            <th>IsDeleted</th>
+                                            <th>Modified By</th>
+                                            <th>Modified Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+
+                                    </thead>
+
+                                    <tbody id="courseTableBody"></tbody>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </main>
+
+
+            <!-- Footer -->
+            <footer class="py-4 bg-light mt-auto">
+
+                <div class="container-fluid px-4">
+
+                    <div class="d-flex align-items-center justify-content-between small">
+
+                        <div class="text-muted">
+                            Copyright &copy; 2025 University Portal
+                        </div>
+
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms & Conditions</a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </footer>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADD COURSE MODAL -->
+    <div class="modal fade" id="addCourseModal" tabindex="-1">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Add New Course
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <form id="addCourseForm">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">Course Title</label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="courseTitle"
+                                   placeholder="Enter course title"
+                                   required>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">Course Code</label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="courseCode"
+                                   placeholder="Enter course code"
+                                   required>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">Credit Hour</label>
+
+                            <input type="number"
+                                   class="form-control"
+                                   id="creditHour"
+                                   min="1"
+                                   step="1"
+                                   placeholder="Enter credit hour"
+                                   required>
+
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary w-100">
+
+                            <i class="fas fa-save me-1"></i>
+                            Save Course
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- EDIT COURSE MODAL -->
+    <div class="modal fade" id="editCourseModal" tabindex="-1">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Edit Course
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <form id="editCourseForm">
+
+                        <input type="hidden" id="editCourseIndex">
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">Course Title</label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="editCourseTitle"
+                                   required>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">Course Code</label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="editCourseCode"
+                                   required>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label class="form-label">Credit Hour</label>
+
+                            <input type="number"
+                                   class="form-control"
+                                   id="editCreditHour"
+                                   min="1"
+                                   step="1"
+                                   required>
+
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary w-100">
+
+                            <i class="fas fa-edit me-1"></i>
+                            Update Course
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- DELETE COURSE MODAL -->
+    <div class="modal fade" id="deleteCourseModal" tabindex="-1">
+
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Delete Course
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <p>
+                        Are you sure you want to delete
+                        <strong id="courseToDelete"></strong>?
+                    </p>
+
+                    <form id="deleteCourseForm">
+
+                        <input type="hidden" id="deleteCourseIndex">
+
+                        <button type="submit" class="btn btn-danger w-100">
+
+                            <i class="fas fa-trash me-1"></i>
+                            Confirm Delete
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- JAVASCRIPT FILES -->
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Simple Datatables JS -->
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"></script>
+
+
+    <script>
+
+        // COURSE DATA
+
+        const courses = [
+
+            {
+                title: "Calculus I",
+                code: "MTH101",
+                credit: 3,
+                addedBy: "Admin",
+                addedDate: "2025-01-10",
+                isDeleted: false,
+                modifiedBy: "David",
+                modifiedDate: "2025-02-02"
+            },
+
+            {
+                title: "Physics II",
+                code: "PHY102",
+                credit: 3,
+                addedBy: "Admin",
+                addedDate: "2025-01-12",
+                isDeleted: true,
+                modifiedBy: "Linda",
+                modifiedDate: "2025-02-04"
+            },
+
+            {
+                title: "Organic Chemistry",
+                code: "CHM103",
+                credit: 2,
+                addedBy: "Admin",
+                addedDate: "2025-01-14",
+                isDeleted: false,
+                modifiedBy: "James",
+                modifiedDate: "2025-02-06"
+            },
+
+            {
+                title: "Intro to Programming",
+                code: "CSE104",
+                credit: 3,
+                addedBy: "Admin",
+                addedDate: "2025-01-16",
+                isDeleted: false,
+                modifiedBy: "Emma",
+                modifiedDate: "2025-02-08"
+            },
+
+            {
+                title: "Thermodynamics I",
+                code: "MEC105",
+                credit: 3,
+                addedBy: "Admin",
+                addedDate: "2025-01-18",
+                isDeleted: true,
+                modifiedBy: "Robert",
+                modifiedDate: "2025-02-09"
+            },
+
+            {
+                title: "Linear Algebra",
+                code: "MTH106",
+                credit: 3,
+                addedBy: "Admin",
+                addedDate: "2025-01-20",
+                isDeleted: false,
+                modifiedBy: "Sarah",
+                modifiedDate: "2025-02-10"
+            },
+
+            {
+                title: "Data Structures",
+                code: "CSE107",
+                credit: 3,
+                addedBy: "Admin",
+                addedDate: "2025-01-22",
+                isDeleted: false,
+                modifiedBy: "Michael",
+                modifiedDate: "2025-02-12"
+            },
+
+            {
+                title: "Thermodynamics II",
+                code: "MEC108",
+                credit: 3,
+                addedBy: "Admin",
+                addedDate: "2025-01-24",
+                isDeleted: false,
+                modifiedBy: "Alice",
+                modifiedDate: "2025-02-14"
+            }
+
+        ];
+
+
+        // VARIABLES
+
+        let coursesTable = null;
+
+
+        // ESCAPE HTML TO PREVENT HTML INJECTION
+
+        function escapeHTML(value) {
+
+            return String(value).replace(/[&<>"']/g, function(char) {
+
+                const entities = {
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;"
+                };
+
+                return entities[char];
+
+            });
+
+        }
+
+
+        // RENDER COURSES
+
+        function renderCourses() {
+
+            const tbody = document.getElementById("courseTableBody");
+
+            // Destroy previous datatable before updating records
+            if (coursesTable) {
+
+                coursesTable.destroy();
+
+                coursesTable = null;
+
+            }
+
+
+            tbody.innerHTML = "";
+
+
+            courses.forEach((course, index) => {
+
+                tbody.innerHTML += `
+
+                    <tr>
+
+                        <td>${escapeHTML(course.title)}</td>
+
+                        <td>${escapeHTML(course.code)}</td>
+
+                        <td>${course.credit}</td>
+
+                        <td>${escapeHTML(course.addedBy)}</td>
+
+                        <td>${escapeHTML(course.addedDate)}</td>
+
+                        <td>
+
+                            <span class="badge ${course.isDeleted ? 'bg-danger' : 'bg-success'} status-badge">
+
+                                ${course.isDeleted ? 'True' : 'False'}
+
+                            </span>
+
+                        </td>
+
+                        <td>${escapeHTML(course.modifiedBy)}</td>
+
+                        <td>${escapeHTML(course.modifiedDate)}</td>
+
+                        <td class="action-cell">
+
+                            <div class="dropdown">
+
+                                <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                                        type="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+
+                                    Actions
+
+                                </button>
+
+
+                                <ul class="dropdown-menu dropdown-menu-end">
+
+                                    <li>
+
+                                        <button class="dropdown-item"
+                                                type="button"
+                                                data-action="edit"
+                                                data-index="${index}">
+
+                                            <i class="fas fa-edit me-2"></i>
+                                            Edit
+
+                                        </button>
+
+                                    </li>
+
+
+                                    <li>
+
+                                        <button class="dropdown-item text-danger"
+                                                type="button"
+                                                data-action="delete"
+                                                data-index="${index}">
+
+                                            <i class="fas fa-trash me-2"></i>
+                                            Delete
+
+                                        </button>
+
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            });
+
+
+            // Initialize datatable after rendering
+            coursesTable = new simpleDatatables.DataTable("#datatablesSimple");
+
+        }
+
+
+
+        // HANDLE ACTION DROPDOWN CLICKS
+
+        document.getElementById("courseTableBody").addEventListener("click", function(e) {
+
+            const actionButton = e.target.closest("[data-action]");
+
+            if (!actionButton) return;
+
+            const index = Number(actionButton.dataset.index);
+
+            const action = actionButton.dataset.action;
+
+
+            if (!Number.isInteger(index) || !courses[index]) return;
+
+
+            if (action === "edit") {
+
+                openEditModal(index);
+
+            }
+
+            else if (action === "delete") {
+
+                setDeleteCourse(index);
+
+            }
+
+        });
+
+
+
+        // OPEN EDIT MODAL
+
+        function openEditModal(index) {
+
+            document.getElementById("editCourseIndex").value = index;
+
+            document.getElementById("editCourseTitle").value = courses[index].title;
+
+            document.getElementById("editCourseCode").value = courses[index].code;
+
+            document.getElementById("editCreditHour").value = courses[index].credit;
+
+
+            const editModal = bootstrap.Modal.getOrCreateInstance(
+
+                document.getElementById("editCourseModal")
+
+            );
+
+            editModal.show();
+
+        }
+
+
+
+        // OPEN DELETE MODAL
+
+        function setDeleteCourse(index) {
+
+            document.getElementById("deleteCourseIndex").value = index;
+
+            document.getElementById("courseToDelete").textContent = courses[index].title;
+
+
+            const deleteModal = bootstrap.Modal.getOrCreateInstance(
+
+                document.getElementById("deleteCourseModal")
+
+            );
+
+            deleteModal.show();
+
+        }
+
+
+
+        // ADD COURSE
+
+        document.getElementById("addCourseForm").addEventListener("submit", function(e) {
+
+            e.preventDefault();
+
+
+            const title = document.getElementById("courseTitle").value.trim();
+
+            const code = document.getElementById("courseCode").value.trim();
+
+            const credit = Number(document.getElementById("creditHour").value);
+
+
+            if (!title || !code || !Number.isInteger(credit) || credit < 1) {
+
+                alert("Please enter valid course details.");
+
+                return;
+
+            }
+
+
+            courses.push({
+
+                title: title,
+
+                code: code,
+
+                credit: credit,
+
+                addedBy: "Admin",
+
+                addedDate: new Date().toISOString().split("T")[0],
+
+                isDeleted: false,
+
+                modifiedBy: "",
+
+                modifiedDate: ""
+
+            });
+
+
+            renderCourses();
+
+
+            bootstrap.Modal.getOrCreateInstance(
+
+                document.getElementById("addCourseModal")
+
+            ).hide();
+
+
+            this.reset();
+
+        });
+
+
+
+        // EDIT COURSE
+
+        document.getElementById("editCourseForm").addEventListener("submit", function(e) {
+
+            e.preventDefault();
+
+
+            const index = Number(document.getElementById("editCourseIndex").value);
+
+
+            if (!Number.isInteger(index) || !courses[index]) return;
+
+
+            const title = document.getElementById("editCourseTitle").value.trim();
+
+            const code = document.getElementById("editCourseCode").value.trim();
+
+            const credit = Number(document.getElementById("editCreditHour").value);
+
+
+            if (!title || !code || !Number.isInteger(credit) || credit < 1) {
+
+                alert("Please enter valid course details.");
+
+                return;
+
+            }
+
+
+            courses[index].title = title;
+
+            courses[index].code = code;
+
+            courses[index].credit = credit;
+
+            courses[index].modifiedBy = "Admin";
+
+            courses[index].modifiedDate = new Date().toISOString().split("T")[0];
+
+
+            renderCourses();
+
+
+            bootstrap.Modal.getOrCreateInstance(
+
+                document.getElementById("editCourseModal")
+
+            ).hide();
+
+        });
+
+
+
+        // DELETE COURSE (SOFT DELETE)
+
+        document.getElementById("deleteCourseForm").addEventListener("submit", function(e) {
+
+            e.preventDefault();
+
+
+            const index = Number(document.getElementById("deleteCourseIndex").value);
+
+
+            if (!Number.isInteger(index) || !courses[index]) return;
+
+
+            courses[index].isDeleted = true;
+
+            courses[index].modifiedBy = "Admin";
+
+            courses[index].modifiedDate = new Date().toISOString().split("T")[0];
+
+
+            renderCourses();
+
+
+            bootstrap.Modal.getOrCreateInstance(
+
+                document.getElementById("deleteCourseModal")
+
+            ).hide();
+
+        });
+
+
+
+        // INITIALIZE TABLE
+
+        renderCourses();
+
+    </script>
+
+</body>
+</html>

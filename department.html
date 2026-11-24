@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="Department Management Dashboard" />
+<meta name="author" content="Josiah" />
+<title>Departments | University Portal</title>
+
+<!-- Styles & Icons -->
+<!-- Bootstrap CSS -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+  rel="stylesheet">
+
+<!-- Simple Datatables CSS -->
+<link
+  href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
+  rel="stylesheet">
+
+<!-- Custom CSS -->
+<link rel="stylesheet" href="css/style.css">
+
+<!-- Font Awesome -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+<style>
+  /* Make the department table taller to avoid dropdown hiding */
+  #departmentsTable_wrapper .dataTable-container {
+    max-height: 500px;
+    overflow-y: auto;
+  }
+</style>
+</head>
+
+<body class="sb-nav-fixed">
+<!-- Top Navigation -->
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark shadow-sm">
+  <a class="navbar-brand ps-3 fw-bold" href="index.html"><i class="fas fa-university me-2"></i>University Portal</a>
+  <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+  <ul class="navbar-nav ms-auto me-3 me-lg-4">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown">
+        <i class="fas fa-user-circle fa-lg"></i>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="navbarDropdown">
+        <li><a class="dropdown-item" href="#">Settings</a></li>
+        <li><a class="dropdown-item" href="#">Activity Log</a></li>
+        <li><hr class="dropdown-divider" /></li>
+        <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<div id="layoutSidenav">
+  <!-- Sidebar -->
+  <div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+      <div class="sb-sidenav-menu">
+        <div class="nav">
+          <div class="sb-sidenav-menu-heading">Core</div>
+          <a class="nav-link" href="index.html"><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>Dashboard</a>
+          <a class="nav-link" href="students.html"><div class="sb-nav-link-icon"><i class="fas fa-user-graduate"></i></div>Students</a>
+          <a class="nav-link active" href="departments.html"><div class="sb-nav-link-icon"><i class="fas fa-building"></i></div>Departments</a>
+          <a class="nav-link" href="courses.html"><div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>Courses</a>
+          <a class="nav-link" href="semesters.html"><div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>Semesters</a>
+          <a class="nav-link" href="teachers.html"><div class="sb-nav-link-icon"><i class="fas fa-chalkboard-teacher"></i></div>Teachers</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div id="layoutSidenav_content">
+    <main>
+      <div class="container-fluid px-4">
+        <h1 class="mt-4 mb-3"><i class="fas fa-building text-primary"></i> Departments</h1>
+        <ol class="breadcrumb mb-4">
+          <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+          <li class="breadcrumb-item active">Departments</li>
+        </ol>
+
+        <!-- View All Logs Button -->
+        <div class="mb-2">
+          <button class="btn btn-info" onclick="openAllLogsModal()"><i class="fas fa-file-alt me-1"></i>View All Logs</button>
+        </div>
+
+        <!-- Department Table -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-table me-2"></i>Department Records</span>
+            <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
+              <i class="fas fa-plus me-1"></i> Add Department
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table id="departmentsTable" class="table table-striped table-hover align-middle text-center">
+                <thead class="">
+                  <tr>
+                    <th>ID</th>
+                    <th>Department Code</th>
+                    <th>Department Name</th>
+                    <th>Added By</th>
+                    <th>Added Date</th>
+                    <th>Modify By</th>
+                    <th>Modify Date</th>
+                    <th>Is Deleted</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="departmentRows"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="py-4 bg-light mt-auto">
+      <div class="container-fluid px-4">
+        <div class="d-flex align-items-center justify-content-between small">
+          <div class="text-muted">Copyright &copy; 2025 University Portal</div>
+          <div>
+            <a href="#">Privacy Policy</a> &middot;
+            <a href="#">Terms & Conditions</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<!-- Modals -->
+<!-- Add Department -->
+<div class="modal fade" id="addDepartmentModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-plus-circle me-2"></i>Add Department</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addDepartmentForm">
+          <div class="mb-3">
+            <label for="deptCode" class="form-label">Department Code</label>
+            <input type="text" id="deptCode" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label for="deptName" class="form-label">Department Name</label>
+            <input type="text" id="deptName" class="form-control" required />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Save Department</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Department -->
+<div class="modal fade" id="editDepartmentModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Edit Department</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editDepartmentForm">
+          <input type="hidden" id="editDeptId" />
+          <div class="mb-3">
+            <label for="editDeptCode" class="form-label">Department Code</label>
+            <input type="text" id="editDeptCode" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label for="editDeptName" class="form-label">Department Name</label>
+            <input type="text" id="editDeptName" class="form-control" required />
+          </div>
+          <button type="submit" class="btn btn-warning w-100">Update Department</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Department Modal -->
+<div class="modal fade" id="deleteDepartmentModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-secondary text-white">
+        <h5 class="modal-title"><i class="fas fa-trash me-2"></i>Delete Department</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form id="deleteDepartmentForm" class="p-3">
+        <input type="hidden" id="deleteDeptId" />
+        <div class="mb-3 fw-semibold" id="deleteDeptName"></div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="deptDeleteCheckbox">
+          <label class="form-check-label" for="deptDeleteCheckbox">Mark as Deleted</label>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary w-100">Confirm</button>
+          <button type="button" class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Manage Courses Modal -->
+<div class="modal fade" id="manageCoursesModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title"><i class="fas fa-book me-2"></i>Manage Courses for <span id="courseDeptName"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addCourseForm" class="mb-3">
+          <div class="row g-2">
+            <div class="col-md-10">
+              <select id="courseSelect" class="form-select" required>
+                <option value="" disabled selected>Select a Course</option>
+              </select>
+            </div>
+            <div class="col-md-2 d-grid">
+              <button class="btn btn-info text-white" type="submit">Add</button>
+            </div>
+          </div>
+        </form>
+
+        <table class="table table-bordered table-hover text-center align-middle">
+          <thead class="table-secondary">
+            <tr>
+              <th>S/N</th>
+              <th>Course Code</th>
+              <th>Course Name</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="courseTableBody"></tbody>
+        </table>
+        <div id="noCoursesMsg" class="text-center text-muted mt-2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Logs Modal -->
+<div class="modal fade" id="viewLogsModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title"><i class="fas fa-file-alt me-2"></i>Audit Logs: <span id="logsDeptName"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead class="table-light">
+            <tr>
+              <th>Date</th>
+              <th>Action</th>
+              <th>Performed By</th>
+            </tr>
+          </thead>
+          <tbody id="logsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View All Logs Modal -->
+<div class="modal fade" id="viewAllLogsModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-file-alt me-2"></i>All Audit Logs</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead class="table-dark">
+            <tr>
+              <th>Department</th>
+              <th>Date</th>
+              <th>Action</th>
+              <th>Performed By</th>
+            </tr>
+          </thead>
+          <tbody id="allLogsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Simple Datatables -->
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"></script>
+
+<!-- Your Department JavaScript -->
+<script src="./depertments.js"></script>
+// --- Dummy Departments Data ---
+let departments = [
+  { id: 1, code: "ME", name: "Mechanical Engineering", addedBy:"Admin", addedDate:"2025-01-01", modifyBy:"Admin", modifyDate:"2025-01-05", isDeleted: false,
+    courses: [
+      { code: "ME101", name: "Thermodynamics" }, 
+      { code: "ME102", name: "Fluid Mechanics" },
+      { code: "ME103", name: "Mechanics of Materials" },
+      { code: "ME104", name: "Manufacturing Processes" },
+      { code: "ME105", name: "Heat Transfer" }
+    ],
+    audit: [{date:"2025-01-10", action:"Created", by:"Admin"}]
+  },
+  { id: 2, code: "CE", name: "Computer Engineering", addedBy:"Admin", addedDate:"2025-01-02", modifyBy:"Admin", modifyDate:"2025-01-12", isDeleted: false,
+    courses: [
+      { code: "CE101", name: "Intro to Computing" },
+      { code: "CE102", name: "Data Structures" },
+      { code: "CE103", name: "Computer Architecture" },
+      { code: "CE104", name: "Operating Systems" },
+      { code: "CE105", name: "Networks" }
+    ],
+    audit: [{date:"2025-01-12", action:"Created", by:"Admin"}]
+  },
+  { id: 3, code: "CIV", name: "Civil Engineering", addedBy:"Admin", addedDate:"2025-01-03", modifyBy:"Admin", modifyDate:"2025-01-15", isDeleted: true,
+    courses: [
+      { code: "CIV101", name: "Structural Analysis" },
+      { code: "CIV102", name: "Surveying" },
+      { code: "CIV103", name: "Construction Materials" },
+      { code: "CIV104", name: "Geotechnical Engineering" },
+      { code: "CIV105", name: "Hydraulics" }
+    ],
+    audit: [{date:"2025-01-15", action:"Created", by:"Admin"}]
+  },
+  { id: 4, code: "EE", name: "Electrical Engineering", addedBy:"Admin", addedDate:"2025-01-04", modifyBy:"Admin", modifyDate:"2025-01-18", isDeleted: false,
+    courses: [
+      { code: "EE101", name: "Circuit Analysis" },
+      { code: "EE102", name: "Electromagnetics" },
+      { code: "EE103", name: "Power Systems" },
+      { code: "EE104", name: "Control Systems" },
+      { code: "EE105", name: "Digital Electronics" }
+    ],
+    audit: [{date:"2025-01-18", action:"Created", by:"Admin"}]
+  },
+  { id: 5, code: "MECH", name: "Mechatronics", addedBy:"Admin", addedDate:"2025-01-05", modifyBy:"Admin", modifyDate:"2025-01-20", isDeleted: false,
+    courses: [
+      { code: "MEC101", name: "Robotics" },
+      { code: "MEC102", name: "Sensors & Actuators" },
+      { code: "MEC103", name: "Embedded Systems" },
+      { code: "MEC104", name: "Automation" },
+      { code: "MEC105", name: "Control Engineering" }
+    ],
+    audit: [{date:"2025-01-20", action:"Created", by:"Admin"}]
+  },
+  { id: 6, code: "CHEM", name: "Chemical Engineering", addedBy:"Admin", addedDate:"2025-01-06", modifyBy:"Admin", modifyDate:"2025-01-22", isDeleted: false,
+    courses: [
+      { code: "CHE101", name: "Process Engineering" },
+      { code: "CHE102", name: "Thermodynamics" },
+      { code: "CHE103", name: "Fluid Mechanics" },
+      { code: "CHE104", name: "Chemical Reaction Engineering" },
+      { code: "CHE105", name: "Material Science" }
+    ],
+    audit: [{date:"2025-01-22", action:"Created", by:"Admin"}]
+  },
+  { id: 7, code: "BIO", name: "Biotechnology", addedBy:"Admin", addedDate:"2025-01-07", modifyBy:"Admin", modifyDate:"2025-01-25", isDeleted: false,
+    courses: [
+      { code: "BIO101", name: "Genetics" },
+      { code: "BIO102", name: "Molecular Biology" },
+      { code: "BIO103", name: "Microbiology" },
+      { code: "BIO104", name: "Bioprocess Engineering" },
+      { code: "BIO105", name: "Bioinformatics" }
+    ],
+    audit: [{date:"2025-01-25", action:"Created", by:"Admin"}]
+  },
+  { id: 8, code: "ENV", name: "Environmental Engineering", addedBy:"Admin", addedDate:"2025-01-08", modifyBy:"Admin", modifyDate:"2025-01-28", isDeleted: false,
+    courses: [
+      { code: "ENV101", name: "Water Resources" },
+      { code: "ENV102", name: "Air Pollution Control" },
+      { code: "ENV103", name: "Waste Management" },
+      { code: "ENV104", name: "Environmental Chemistry" },
+      { code: "ENV105", name: "Sustainable Design" }
+    ],
+    audit: [{date:"2025-01-28", action:"Created", by:"Admin"}]
+  }
+];
+
+
+// Predefined Courses List for Dropdown
+const allCourses = [
+  { code: "ME101", name: "Thermodynamics" },
+  { code: "ME102", name: "Fluid Mechanics" },
+  { code: "ME103", name: "Mechanics of Materials" },
+  { code: "CE101", name: "Intro to Computing" },
+  { code: "CE102", name: "Data Structures" },
+  { code: "CIV101", name: "Structural Analysis" },
+  { code: "CIV102", name: "Surveying" }
+];
+
+let deptTable;
+let selectedDeptId = null;
+
+// --- Helper Functions ---
+const addAudit = (deptId, action, by="Admin") => {
+  const dept = departments.find(d => d.id === deptId);
+  dept.audit.push({ date: new Date().toISOString().split("T")[0], action, by });
+};
+
+// Render Departments Table
+const renderDepartments = () => {
+  const tableBody = document.getElementById("departmentRows");
+  tableBody.innerHTML = departments.map((d, i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td>${d.code}</td>
+      <td>${d.name}</td>
+      <td>${d.addedBy}</td>
+      <td>${d.addedDate}</td>
+      <td>${d.modifyBy}</td>
+      <td>${d.modifyDate}</td>
+      <td><span class="badge ${d.isDeleted ? 'bg-danger' : 'bg-success'}">${d.isDeleted}</span></td>
+      <td>
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">Actions</button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" onclick="openEditModal(${d.id})"><i class="fas fa-edit text-warning me-2"></i>Edit Department</a></li>
+            <li><a class="dropdown-item" href="#" onclick="openManageCoursesModal(${d.id})"><i class="fas fa-book text-info me-2"></i>Manage Courses</a></li>
+            <li><a class="dropdown-item" href="#" onclick="openViewLogsModal(${d.id})"><i class="fas fa-file-alt text-info me-2"></i>View Logs</a></li>
+            <li><a class="dropdown-item" href="#" onclick="openDeleteModal(${d.id})"><i class="fas fa-trash me-2"></i>Delete</a></li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+  `).join("");
+
+  if (!deptTable) {
+    deptTable = new simpleDatatables.DataTable("#departmentsTable");
+  } else {
+    deptTable.rows().remove();
+    deptTable.rows().add(tableBody.querySelectorAll("tr"));
+    deptTable.update();
+  }
+};
+
+// --- Add/Edit/Delete Department ---
+document.getElementById("addDepartmentForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const code = document.getElementById("deptCode").value;
+  const name = document.getElementById("deptName").value;
+  const newDept = { 
+    id: Date.now(), code, name, 
+    addedBy:"Admin", addedDate:new Date().toISOString().split("T")[0], 
+    modifyBy:"Admin", modifyDate:new Date().toISOString().split("T")[0],
+    isDeleted:false, courses:[], audit:[{date:new Date().toISOString().split("T")[0], action:"Created", by:"Admin"}]
+  };
+  departments.push(newDept);
+  renderDepartments();
+  bootstrap.Modal.getInstance(document.getElementById("addDepartmentModal")).hide();
+});
+
+const openEditModal = (id)=>{
+  selectedDeptId = id;
+  const dept = departments.find(d=>d.id===id);
+  document.getElementById("editDeptId").value = dept.id;
+  document.getElementById("editDeptCode").value = dept.code;
+  document.getElementById("editDeptName").value = dept.name;
+  new bootstrap.Modal(document.getElementById("editDepartmentModal")).show();
+};
+
+document.getElementById("editDepartmentForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const dept = departments.find(d=>d.id===selectedDeptId);
+  dept.code = document.getElementById("editDeptCode").value;
+  dept.name = document.getElementById("editDeptName").value;
+  dept.modifyBy = "Admin";
+  dept.modifyDate = new Date().toISOString().split("T")[0];
+  addAudit(dept.id, "Edited Department");
+  renderDepartments();
+  bootstrap.Modal.getInstance(document.getElementById("editDepartmentModal")).hide();
+});
+
+const openDeleteModal = (id)=>{
+  selectedDeptId = id;
+  const dept = departments.find(d=>d.id===id);
+  document.getElementById("deleteDeptId").value = dept.id;
+  document.getElementById("deleteDeptName").textContent = `Delete Department: ${dept.name}?`;
+  document.getElementById("deptDeleteCheckbox").checked = dept.isDeleted;
+  new bootstrap.Modal(document.getElementById("deleteDepartmentModal")).show();
+};
+
+document.getElementById("deleteDepartmentForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const dept = departments.find(d=>d.id===selectedDeptId);
+  dept.isDeleted = document.getElementById("deptDeleteCheckbox").checked;
+  addAudit(dept.id, dept.isDeleted ? "Marked Deleted" : "Restored");
+  renderDepartments();
+  bootstrap.Modal.getInstance(document.getElementById("deleteDepartmentModal")).hide();
+});
+
+// --- Manage Courses Modal ---
+const openManageCoursesModal = (id)=>{
+  selectedDeptId = id;
+  const dept = departments.find(d=>d.id===id);
+  document.getElementById("courseDeptName").textContent = dept.name;
+
+  const select = document.getElementById("courseSelect");
+  select.innerHTML = `<option value="" disabled selected>Select a Course</option>`;
+  allCourses.forEach(c=>{
+    if(!dept.courses.find(dc=>dc.code===c.code)) {
+      const option = document.createElement("option");
+      option.value = c.code;
+      option.textContent = `${c.code} - ${c.name}`;
+      select.appendChild(option);
+    }
+  });
+
+  renderCourseTable();
+  new bootstrap.Modal(document.getElementById("manageCoursesModal")).show();
+};
+
+const renderCourseTable = ()=>{
+  const dept = departments.find(d=>d.id===selectedDeptId);
+  const tbody = document.getElementById("courseTableBody");
+  tbody.innerHTML = dept.courses.map((c,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td>${c.code}</td>
+      <td>${c.name}</td>
+      <td><button class="btn btn-sm btn-danger" onclick="confirmDeleteCourse('${c.code}')"><i class="fas fa-trash"></i></button></td>
+    </tr>
+  `).join("");
+  document.getElementById("noCoursesMsg").textContent = dept.courses.length===0?"No courses assigned yet.":"";
+};
+
+document.getElementById("addCourseForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const dept = departments.find(d=>d.id===selectedDeptId);
+  const selectedCode = document.getElementById("courseSelect").value;
+  const course = allCourses.find(c=>c.code===selectedCode);
+  if(course && !dept.courses.find(c=>c.code===course.code)){
+    dept.courses.push(course);
+    addAudit(dept.id, `Added Course ${course.code}`);
+    openManageCoursesModal(selectedDeptId);
+  }
+});
+
+// --- Course Deletion Confirmation ---
+const confirmDeleteCourse = (code)=>{
+  if(confirm("Are you sure you want to delete this course?")) {
+    deleteCourse(code);
+  }
+};
+
+const deleteCourse = (code)=>{
+  const dept = departments.find(d=>d.id===selectedDeptId);
+  dept.courses = dept.courses.filter(c=>c.code!==code);
+  addAudit(dept.id, `Deleted Course ${code}`);
+  renderCourseTable();
+};
+
+// --- View Logs ---
+const openViewLogsModal = (id)=>{
+  selectedDeptId = id;
+  const dept = departments.find(d=>d.id===id);
+  document.getElementById("logsDeptName").textContent = dept.name;
+  const tbody = document.getElementById("logsTableBody");
+  tbody.innerHTML = dept.audit.map(a=>`
+    <tr>
+      <td>${a.date}</td>
+      <td>${a.action}</td>
+      <td>${a.by}</td>
+    </tr>
+  `).join("");
+  new bootstrap.Modal(document.getElementById("viewLogsModal")).show();
+};
+
+const openAllLogsModal = ()=>{
+  const tbody = document.getElementById("allLogsTableBody");
+  tbody.innerHTML = departments.flatMap(d=>d.audit.map(a=>`
+    <tr>
+      <td>${d.name}</td>
+      <td>${a.date}</td>
+      <td>${a.action}</td>
+      <td>${a.by}</td>
+    </tr>
+  `)).join("");
+  new bootstrap.Modal(document.getElementById("viewAllLogsModal")).show();
+};
+
+// Initial Render
+renderDepartments();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(129, 139, 113);
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    margin-top: 40px;
+}
+
+.nav{
+    display: block;
+    
+} 
+.nav a{
+    color: rgb(8, 6, 6);
+    font-weight: bolder;
+}
+
+/* Arrange sidebar and main content horizontally */
+#layoutSidenav {
+    display: flex;
+}
+
+/* Sidebar */
+#layoutSidenav_nav {
+    width: 250px;
+    min-height: 100vh;
+    background: rgba(78, 85, 105, 0.921);
+    flex-shrink: 0;
+}
+
+/* Main content */
+#layoutSidenav_content {
+    flex: 1;
+    background-color: rgb(129, 139, 113);
+}
+
+/* Main section */
+main {
+    display: block;
+    position: relative;
+}
+/* footer */
+/* #layoutSidenav_content footer.py-4.bg-light.mt-auto {
+    background-color: rgba(78, 85, 105, 0.921) !important;
+    color: white !important;
+}
+
+#layoutSidenav_content footer .text-muted {
+    color: white !important;
+}
+
+#layoutSidenav_content footer.py-4.bg-light.mt-auto {
+    background-color: rgba(78, 85, 105, 0.921) !important;
+    color: white !important;
+}
+
+#layoutSidenav_content footer .text-muted {
+    color: white !important;
+} */
+
+#layoutSidenav_content footer.py-4.bg-light.mt-auto {
+    background-color: rgba(78, 85, 105, 0.921) !important;
+    color: white !important;
+    
+}
+
+
+#layoutSidenav_content footer .text-muted {
+    color: white !important;
+}
+
+#layoutSidenav_content footer a {
+    color: white !important;
+}
+#layoutSidenav {
+    display: flex;
+    min-height: 100vh;
+}
+
+#layoutSidenav_content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    margin-top: auto;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
