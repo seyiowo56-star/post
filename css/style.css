@@ -1,3 +1,4 @@
+
 *,
 *::before,
 *::after {
@@ -5,102 +6,109 @@
 }
 
 body {
-    background-color: rgb(129, 139, 113);
+    background-color:#eff4f8;
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
 }
 
-h1 {
-    text-align: center;
-    color: white;
-    margin-top: 40px;
+/* Navbar */
+.navbar {
+    background-color: #0f4c75 !important;
 }
 
-.nav{
-    display: block;
-    
-} 
-.nav a{
-    color: rgb(8, 6, 6);
-    font-weight: bolder;
+.navbar-brand {
+    font-weight: bold;
 }
 
-/* Arrange sidebar and main content horizontally */
-#layoutSidenav {
-    display: flex;
-}
-
-/* Sidebar */
-#layoutSidenav_nav {
-    width: 250px;
-    min-height: 100vh;
-    background: rgba(78, 85, 105, 0.921);
-    flex-shrink: 0;
+.navbar a {
+    color: white !important;
 }
 
 /* Main content */
-#layoutSidenav_content {
-    flex: 1;
-    background-color: rgb(129, 139, 113);
+main {
+    padding: 25px;
 }
 
-/* Main section */
-main {
+/* Heading */
+h1 {
+    color: #0f4c75;
+    text-align: center;
+    margin: 25px 0;
+}
+
+/* Statistics cards */
+.card {
+    border: none;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Circular icons */
+.icon-circle {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Quick links */
+.quick-links a {
     display: block;
-    position: relative;
-}
-/* footer */
-/* #layoutSidenav_content footer.py-4.bg-light.mt-auto {
-    background-color: rgba(78, 85, 105, 0.921) !important;
-    color: white !important;
-}
-
-#layoutSidenav_content footer .text-muted {
-    color: white !important;
+    text-decoration: none;
+    color: #0f4c75;
+    padding: 12px;
+    margin: 8px 0;
+    background-color: #f1f6fb;
+    border-radius: 8px;
+    font-weight: bold;
 }
 
-#layoutSidenav_content footer.py-4.bg-light.mt-auto {
-    background-color: rgba(78, 85, 105, 0.921) !important;
-    color: white !important;
+.quick-links a:hover {
+    background-color: #dceaf7;
 }
 
-#layoutSidenav_content footer .text-muted {
-    color: white !important;
-} */
-
-#layoutSidenav_content footer.py-4.bg-light.mt-auto {
-    background-color: rgba(78, 85, 105, 0.921) !important;
-    color: white !important;
-    
-}
-
-
-#layoutSidenav_content footer .text-muted {
-    color: white !important;
-}
-
-#layoutSidenav_content footer a {
-    color: white !important;
-}
-#layoutSidenav {
-    display: flex;
-    min-height: 100vh;
-}
-
-#layoutSidenav_content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-main {
-    flex: 1;
-}
-
+/* Footer */
 footer {
-    margin-top: auto;
+    background-color: #0f4c75 !important;
+    color: white !important;
+    padding: 15px;
+    text-align: center;
 }
-table, th, td {
-    border: 1px solid black;
+
+footer a,
+footer .text-muted {
+    color: white !important;
+}
+
+/* Tables */
+table {
+    width: 100%;
     border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #dee2e6;
+}
+
+th {
+    background-color: #0f4c75;
+    color: white;
+}
+
+td {
+    padding: 10px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    main {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 25px;
+    }
 }
